@@ -23,3 +23,38 @@
     - Type annotate everything
     - Write tests
     - Don't commit sensitive info to git such as api keys
+
+### Making a Pull Request
+
+To contribute your code for review:
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/YourUsername/YourProject.git
+   cd YourProject
+   uv sync
+   ```
+
+2. **Create a new branch** for your feature/fix:
+   ```bash
+   git checkout -b feature/description-of-changes
+   ```
+
+3. **Make your changes** and commit:
+   ```bash
+   git add .
+   git commit -m "Clear description of what you changed"
+   ```
+
+4. **Push your branch**:
+   ```bash
+   git push origin feature/description-of-changes
+   ```
+
+5. **Open a Pull Request** on GitHub:
+   - Go to https://github.com/YourUsername/YourProject
+   - You'll see a "Compare & pull request" button for your branch
+   - Click it and fill in a description of your changes
+   - Click "Create pull request"
+
+6. **Wait for review**: Your PR will be reviewed and merged once approved!
