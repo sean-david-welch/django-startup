@@ -22,3 +22,4 @@
     - Use class based views instead of functions; they encapsulate boiler plate and a far easier to work with
     - Type annotate everything
     - Write tests
+    - Don't commit sensitive info to git such as api keys
