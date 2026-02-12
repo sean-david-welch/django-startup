@@ -38,8 +38,35 @@ uv run python manage.py migrate
 # Create a superuser
 uv run python manage.py createsuperuser
 
-# Run the development server
+# Run the development server (with debugger support via django-extensions)
+uv run python manage.py runserver_plus
+
+# Or standard development server
 uv run python manage.py runserver
+```
+
+### Code Quality & Formatting (Ruff)
+```bash
+# Check for linting issues
+uv run ruff check .
+
+# Auto-fix issues where possible
+uv run ruff check --fix .
+
+# Format code (matches Black style)
+uv run ruff format .
+
+# Check and format together
+uv run ruff check --fix . && uv run ruff format .
+```
+
+### Enhanced Django Shell
+```bash
+# Use shell_plus for an enhanced shell with auto-imported models and apps
+uv run python manage.py shell_plus
+
+# Within the shell, all models and common Django utilities are pre-imported
+# Example: User.objects.all() works immediately without importing User
 ```
 
 ### Running Tests
