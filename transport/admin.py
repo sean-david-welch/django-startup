@@ -1,5 +1,5 @@
 from django.contrib import admin
-from transport.models import TransportOperator, TransportRoute, TransportSchedule
+from transport.models import TransportOperator, TransportRoute, TravelOption
 
 
 @admin.register(TransportOperator)
@@ -16,8 +16,8 @@ class TransportRouteAdmin(admin.ModelAdmin):
     search_fields = ["origin__name", "destination__name"]
 
 
-@admin.register(TransportSchedule)
-class TransportScheduleAdmin(admin.ModelAdmin):
-    list_display = ["route", "departure_time", "base_price", "is_active"]
-    list_filter = ["is_active", "route__transport_type"]
+@admin.register(TravelOption)
+class TravelOptionAdmin(admin.ModelAdmin):
+    list_display = ["route", "departure_date", "departure_time", "arrival_date", "arrival_time", "base_price", "is_active"]
+    list_filter = ["is_active", "route__transport_type", "departure_date"]
     search_fields = ["route__origin__name", "route__destination__name"]

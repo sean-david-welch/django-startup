@@ -1,70 +1,46 @@
-from datetime import time
+from datetime import timedelta
 from decimal import Decimal
 from django.db import models
 from transport.models.base import PriceableEntity
 from transport.models.route import TransportRoute
 
 
-class TransportSchedule(PriceableEntity):
-    """Represents a specific scheduled departure for a route."""
+class TravelOption(PriceableEntity):
+    """Represents a specific travel option with exact departure and arrival times."""
 
     route: TransportRoute = models.ForeignKey(
-        TransportRoute, on_delete=models.CASCADE, related_name="schedules"
+        TransportRoute, on_delete=models.CASCADE, related_name="travel_options"
     )
 
-    # Schedule Information
-    departure_time: time = models.TimeField(help_text="Daily departure time")
-    arrival_time: time = models.TimeField(help_text="Daily arrival time")
-    duration_minutes: int = models.PositiveIntegerField()
+    # Departure Information
+    departure_date: models.DateField = models.DateField(help_text="Departure date")
+    departure_time: models.TimeField = models.TimeField(help_text="Departure time")
 
-    # Frequency (which days this schedule operates)
-    operates_monday: bool = models.BooleanField(default=True)
-    operates_tuesday: bool = models.BooleanField(default=True)
-    operates_wednesday: bool = models.BooleanField(default=True)
-    operates_thursday: bool = models.BooleanField(default=True)
-    operates_friday: bool = models.BooleanField(default=True)
-    operates_saturday: bool = models.BooleanField(default=True)
-    operates_sunday: bool = models.BooleanField(default=True)
+    # Arrival Information
+    arrival_date: models.DateField = models.DateField(help_text="Arrival date")
+    arrival_time: models.TimeField = models.TimeField(help_text="Arrival time")
 
-    # Validity Period
-    valid_from: models.DateField = models.DateField()
-    valid_until: models.DateField = models.DateField(null=True, blank=True)
+    # Travel Duration
+    total_travel_time: models.DurationField = models.DurationField(
+        help_text="Total travel time duration"
+    )
 
-    # Capacity & Availability
-    total_capacity: int = models.PositiveIntegerField(default=100)
-    remaining_capacity: int = models.PositiveIntegerField(default=100)
-
-    # Status
+    # Status & Metadata
     is_active: bool = models.BooleanField(default=True)
     created_at: models.DateTimeField = models.DateTimeField(auto_now_add=True)
     updated_at: models.DateTimeField = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = "transport_schedules"
+        db_table = "transport_travel_options"
         indexes = [
-            models.Index(fields=["route", "departure_time"]),
-            models.Index(fields=["valid_from", "valid_until"]),
-            models.Index(fields=["is_active", "base_price"]),
-            models.Index(fields=["route", "is_active", "base_price"]),
+            models.Index(fields=["route", "departure_date"]),
+            models.Index(fields=["departure_date", "is_active"]),
         ]
-        ordering = ["departure_time"]
+        ordering = ["departure_date", "departure_time"]
 
     def __str__(self) -> str:
-        return f"{self.route} at {self.departure_time}"
+        return f"{self.route} on {self.departure_date} at {self.departure_time}"
 
     def get_effective_price(self) -> Decimal:
         """Calculate effective price (can add dynamic pricing later)."""
         return self.base_price
-
-    def operates_on_day(self, day_of_week: int) -> bool:
-        """Check if schedule operates on given day (0=Monday, 6=Sunday)."""
-        day_map = {
-            0: self.operates_monday,
-            1: self.operates_tuesday,
-            2: self.operates_wednesday,
-            3: self.operates_thursday,
-            4: self.operates_friday,
-            5: self.operates_saturday,
-            6: self.operates_sunday,
-        }
-        return day_map.get(day_of_week, False)
