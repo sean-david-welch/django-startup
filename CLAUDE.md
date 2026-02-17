@@ -132,6 +132,16 @@ Based on this project's best practices:
 
 4. **Models Design**: Each Django app typically represents a distinct domain model or set of related dataclasses. Keep models focused and well-organized.
 
+5. **Object-Oriented Design**: All code should be organized around classes. Avoid standalone functions except for utilities and decorators.
+
+6. **Dependency Injection**: Use constructor injection to pass dependencies into classes. This promotes loose coupling and testability.
+
+7. **Abstract Base Classes**: Make heavy use of abstract base classes and interfaces to define contracts and enforce consistent behavior across implementations.
+
+8. **Method Length**: Aim for methods and functions to be no longer than 6 lines. This encourages single responsibility and clarity. Exceptions are allowed when necessary, but the intent is to keep methods concise.
+
+9. **File Organization**: Store each class in its own dedicated file. This keeps the codebase organized and makes navigation easier.
+
 ## Environment Variables
 
 - `.env` file is ignored by git (listed in `.gitignore`)
